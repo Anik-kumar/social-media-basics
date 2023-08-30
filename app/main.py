@@ -1,11 +1,11 @@
 import psycopg2
-from fastapi import FastAPI, Response, status, HTTPException, Depends
+from fastapi import FastAPI
 
 from psycopg2.extras import RealDictCursor
 import time
 from . import models, schemas, utils
 from .database import engine, SessionLocal, get_db
-from .routes import posts, users
+from .routes import posts, users, auth
 
 
 
@@ -17,7 +17,7 @@ app = FastAPI()
 
 while True:
     try:
-        conn = psycopg2.connect(host="localhost", database="fastapi", user="postgres", password="a1s2d3f4;", cursor_factory=RealDictCursor)
+        conn = psycopg2.connect(host="localhost", database="fastapi", user="postgres", password="aniksarker", cursor_factory=RealDictCursor)
         cursor = conn.cursor()
         print("database connection successful")
         break
@@ -29,11 +29,12 @@ while True:
 
 app.include_router(posts.router)
 app.include_router(users.router)
+app.include_router(auth.router)
 
 
 @app.get("/")
-def read_root():
-    return {"Hello": "World"}
+def root():
+    return "Social Media Basics"
 
 
 
